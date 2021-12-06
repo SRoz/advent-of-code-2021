@@ -6,10 +6,11 @@ My challenges this year.
 3. Complete in Go
 
 
-Day | Python | No Imports | Go  |
-:-: |:-:     |:-:         |:-:  |
-1   | x      | x          | x   |
-2   | x      | x          | x   |
-3   | x      | x          | 1/2 |
-4   | x      | x          |     |
-5   | x      | x          |     |
+Day | Python | No Imports | Go  | Comment |
+:-: |:-:     |:-:         |:-:  |:-       |
+1   | x      | x          | x   |         |
+2   | x      | x          | x   |         |
+3   | x      | x          | 1/2 |         |
+4   | x      | x          |     |         |
+5   | x      | x          |     |         |
+5   |        |            | x   | Pretty simple today |
