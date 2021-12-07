@@ -13,4 +13,5 @@ Day | Python | No Imports | Go  | Comment |
 3   | x      | x          | 1/2 |         |
 4   | x      | x          |     |         |
 5   | x      | x          |     |         |
-5   |        |            | x   | Pretty simple today |
+6   |        |            | x   | Pretty simple today |
+7   | x      |            | x   | Minimal solutions |
