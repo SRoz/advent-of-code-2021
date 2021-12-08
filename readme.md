@@ -15,3 +15,4 @@ Day | Python | No Imports | Go  | Comment |
 5   | x      | x          |     |         |
 6   |        |            | x   | Pretty simple today |
 7   | x      |            | x   | Minimal solutions |
+8   | x      | x          | x   | A day of if and elses |
