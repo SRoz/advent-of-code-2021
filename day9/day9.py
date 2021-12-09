@@ -37,14 +37,6 @@ def explore_path(grid, loc, count):
         d4 = explore_path(grid, (i, j+1), count)
         return 1+d1+d2+d3+d4
 
-import numpy as np
-with open("day9/inputs/test1.txt", "r") as f:
-    test1 = [[int(i) for i in f if i != "\n"] for f in f.readlines()]
-input = np.array(test1)
-x = np.concatenate([np.ones_like(input[:1,:])*10, input, np.ones_like(input[:1,:])*10])
-x = np.concatenate([np.ones_like(x[:,:1])*10, x, np.ones_like(x[:,:1])*10], axis=1)
-
-
 
 def part2(input):
     input = np.array(input)
