@@ -12,7 +12,6 @@ def step(input):
 
     return octs, all_flashers.sum()
 
-
 def part1(input):
     octs = np.array(input)
     n_total_flashes = 0
