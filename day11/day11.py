@@ -1,4 +1,5 @@
 import numpy as np
+import itertools
 
 def add_one(input):
     output = list()
@@ -11,26 +12,18 @@ def add_one(input):
 
 
 def step(input):
-    # Add 1
     octs = input + 1
 
-    all_flashers = np.zeros_like(octs)
+    all_flashers = np.zeros_like(octs, dtype=bool)
 
     while (flashers := octs > 9).any():
         # 8 directions:
-        ul = np.pad(flashers, 1)[2:,2:]
-        um = np.pad(flashers, 1)[2:,1:-1]
-        ur = np.pad(flashers, 1)[2:,:-2]
-        ml = np.pad(flashers, 1)[1:-1:,2:]
-        mr = np.pad(flashers, 1)[1:-1:,:-2]
-        ll = np.pad(flashers, 1)[:-2:,2:]
-        lm = np.pad(flashers, 1)[:-2:,1:-1]
-        lr = np.pad(flashers, 1)[:-2:,:-2]
-
-        octs = octs + ul+um+ur+ml+mr+ll+lm+lr
-
+        for i, j in itertools.product((0,1,2), (0,1,2)):
+                if not (i==j==1):
+                    octs += np.pad(flashers, 1)[j:(j+10),i:(i+10)]
+                    
         all_flashers = flashers | all_flashers
-        octs[all_flashers.astype(bool)] = 0
+        octs[all_flashers] = 0
 
     return octs, all_flashers.sum()
 
@@ -45,8 +38,6 @@ def part1(input):
 
 def part2(input):
     octs = np.array(input)
-    n_total_flashes = 0
-
     n_steps = 0
     while not (octs==0).all():
         octs, _ = step(octs)
@@ -57,5 +48,5 @@ if __name__=='__main__':
     with open("day11/inputs/input1.txt", "r") as f:
         input1 = [[int(n) for n in l if n!='\n'] for l in f.readlines()]
 
-    print(part1(input1))
-    print(part2(input1))
+    print(part1(input1)) #1773
+    print(part2(input1)) #494
