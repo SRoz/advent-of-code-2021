@@ -1,17 +1,5 @@
 import numpy as np
 from scipy.signal import convolve2d
-import itertools
-
-
-def add_one(input):
-    output = list()
-    for line in input:
-        line_out = list()
-        for n in line:
-            line_out.append(n+1)
-        output.append(line_out)
-    return output
-
 
 def step(input):
     octs = input + 1
@@ -45,5 +33,5 @@ if __name__=='__main__':
     with open("day11/inputs/input1.txt", "r") as f:
         input1 = [[int(n) for n in l if n!='\n'] for l in f.readlines()]
 
-    print(part1(input1)) #1773
-    print(part2(input1)) #494
+    print(part1(input1))
+    print(part2(input1))
