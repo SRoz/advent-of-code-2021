@@ -1,5 +1,7 @@
 import numpy as np
+from scipy.signal import convolve2d
 import itertools
+
 
 def add_one(input):
     output = list()
@@ -13,15 +15,10 @@ def add_one(input):
 
 def step(input):
     octs = input + 1
-
     all_flashers = np.zeros_like(octs, dtype=bool)
 
     while (flashers := octs > 9).any():
-        # 8 directions:
-        for i, j in itertools.product((0,1,2), (0,1,2)):
-                if not (i==j==1):
-                    octs += np.pad(flashers, 1)[j:(j+10),i:(i+10)]
-                    
+        octs += convolve2d(flashers, np.array([[1,1,1],[1,0,1], [1,1,1]]), mode='same')
         all_flashers = flashers | all_flashers
         octs[all_flashers] = 0
 
