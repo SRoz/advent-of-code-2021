@@ -50,8 +50,6 @@ def print_grid(coords):
     for line in canvas:
         print("".join(line))
 
-    #print_lines = 
-
 def part2(coords, folds):
     for fold in folds:
         coords = fold_grid(coords, fold)
