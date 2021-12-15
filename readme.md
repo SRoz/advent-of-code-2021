@@ -16,4 +16,20 @@ Day | Python | No Imports | Go  | Comment |
 6   |        |            | x   | Pretty simple today |
 7   | x      |            | x   | Minimal solutions |
 8   | x      | x          |    | A day of if and elses |
-8   | x      |           |    | Recursions |
+9   | x      |           |    | Recursions |
+10  | x      | x         |    |    |
+11  | x      |           |    |    |
+12  | x      | x         |    |    |
+13  | x      | x         |    |    |
+14  | x      |           |    |    |
+15  | x      |           |    | Easy with networkx |
+16  |        |           |    |    |
+17  |        |           |    |    |
+18  |        |           |    |    |
+19  |        |           |    |    |
+20  |        |           |    |    |
+21  |        |           |    |    |
+22  |        |           |    |    |
+23  |        |           |    |    |
+24  |        |           |    |    |
+25  |        |           |    |    |
