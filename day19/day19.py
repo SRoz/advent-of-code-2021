@@ -1,5 +1,6 @@
-from functools import lru_cache
 import numpy as np
+import networkx as nx
+from scipy.spatial.distance import cdist
 from itertools import combinations, product
 
 def read_input(fn):
@@ -33,9 +34,6 @@ def get_all_relative_vecs(set1):
     valid_mask = ~np.logical_or.reduce([np.eye(d.shape[0], k=i, dtype=bool) for i in range(d.shape[0]+1)])
     return d[valid_mask]
 
-# def get_num_matches(A, B):
-#     return np.apply_along_axis(lambda x: np.any(np.all(x == B, axis=1)), axis=1, arr=A).sum()
-
 def get_num_matches(A,B):
     return sum([1 for l in A if l.tolist() in B.tolist()])
 
@@ -66,7 +64,7 @@ def add_points(set1, set2):
             rotations.append(rot)
 
     if len(rotations)==0:
-        return set1, False
+        return set1, False, False, False
     elif len(rotations)>1:
         raise ValueError("Too many rotations")
     else:
@@ -76,10 +74,10 @@ def add_points(set1, set2):
     transformations, counts = np.unique(np.concatenate((rotated_set2 - set1[:,None,:])),axis=0, return_counts=True)
 
     if max(counts) < 12:
-        return set1, False
+        return set1, False, False, False
 
-    transform = transformations[np.argmax(counts)]
-    transformed_set2 = rotated_set2 - transform
+    transform = -transformations[np.argmax(counts)]
+    transformed_set2 = rotated_set2 + transform
 
     # for rot, i, j in product(rotations, range(set1.shape[0]), range(set2.shape[0])):
     #     rotated_set2 = np.matmul(set2, rot)
@@ -92,46 +90,70 @@ def add_points(set1, set2):
     # else:
     #     return set1, False
 
-    return np.unique(np.concatenate([set1,transformed_set2]), axis=0), True
-
+    return np.unique(np.concatenate([set1,transformed_set2]), axis=0), True, rot, transform
 
 def explore_matching(input):
-
-    pairs = list()
-    for i, j in combinations(range(len(input)),2):
-        _, paired = add_points(np.array(input[i]), np.array(input[j]))
+    pairs = dict()
+    for i, j in product(range(len(input)),range(len(input))):
+        _, paired, rot, transform = add_points(np.array(input[i]), np.array(input[j]))
         if paired:
-            pairs.append((i,j))
+            pairs[(j,i)] =  (rot, transform)
     return pairs
 
-def part1(input):
-    
-    points = input[0]
-    next = input[1:]
-    n_added = 0
-    while True:
-        rest = next
-        next = list()
-        for new_points in rest:
-            before = len(points)
-            points, _ = add_points(points, np.array(new_points))
-            if before != len(points):
-                n_added += 1
-                print(f"n points: {len(points)}")
-                if n_added >= (len(input)-1):
-                    break
-            else:
-                next.append(new_points)
-        else:
-            continue
-        break
 
-    print(len(points))
+def apply_transformation(points, rot, transform):
+    return np.matmul(points, rot) + transform
+
+def part1(input):
+    all_pairs = explore_matching(input)
+
+    G = nx.Graph(all_pairs.keys())
+
+    results = list()
+
+    # Get all beacons in coords of scanner 0
+    for i in range(len(input)):
+        path = nx.shortest_path(G, source=i, target=0)
+
+        transformed_points = input[i]
+        for coords_from, coords_to in zip(path,path[1:]):
+            rot, transform = all_pairs[(coords_from, coords_to)]
+            transformed_points = apply_transformation(transformed_points, rot, transform)
+        
+        results.append(transformed_points)
+
+    print(np.unique(np.concatenate(results),axis=0).shape[0])
+
+def part2(input):
+    all_pairs = explore_matching(input)
+
+    # Get all scanners in coords of scanner 0
+    G = nx.Graph(all_pairs.keys())
+
+    results = list()
+
+    # Get all beacons in coords of scanner 0
+    for i in range(len(input)):
+        path = nx.shortest_path(G, source=i, target=0)
+
+        transformed_points = np.array([[0,0,0]])
+        for coords_from, coords_to in zip(path,path[1:]):
+            rot, transform = all_pairs[(coords_from, coords_to)]
+            transformed_points = apply_transformation(transformed_points, rot, transform)
+        
+        results.append(transformed_points)
+
+    scanner_grid = np.concatenate(results,axis=0)
+
+    print(np.max(cdist(scanner_grid, scanner_grid, metric='cityblock')))
+
 
 if __name__=='__main__':
     test1 = read_input("day19/inputs/test1.txt")
     input1 = read_input("day19/inputs/input1.txt")
 
     #part1(test1)
-    #explore_matching(test1)
-    part1(input1)
+    #part1(input1)
+
+    #part2(test1)
+    part2(input1)
