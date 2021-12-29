@@ -79,17 +79,6 @@ def add_points(set1, set2):
     transform = -transformations[np.argmax(counts)]
     transformed_set2 = rotated_set2 + transform
 
-    # for rot, i, j in product(rotations, range(set1.shape[0]), range(set2.shape[0])):
-    #     rotated_set2 = np.matmul(set2, rot)
-    #     transform = set1[i] - rotated_set2[j]
-    #     transformed_set2 = rotated_set2 + transform
-    #     n_match = get_num_matches(transformed_set2, set1)
-                
-    #     if n_match>=11:
-    #         break
-    # else:
-    #     return set1, False
-
     return np.unique(np.concatenate([set1,transformed_set2]), axis=0), True, rot, transform
 
 def explore_matching(input):
@@ -152,8 +141,8 @@ if __name__=='__main__':
     test1 = read_input("day19/inputs/test1.txt")
     input1 = read_input("day19/inputs/input1.txt")
 
-    #part1(test1)
-    #part1(input1)
+    part1(test1)
+    part1(input1)
 
-    #part2(test1)
+    part2(test1)
     part2(input1)
